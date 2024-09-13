@@ -4,25 +4,24 @@ const express = require("express")
 const app = express()
 const PORT = 3000
 
+const routes = require("./routes")
+
 app.use(express.json())
+app.use(routes)
 
 app.use((error, request, response, next) => {
-  if(error instanceof AppError) {
+  if (error instanceof AppError) {
     return response.status(error.statusCode).json({
       status: "error",
       message: error.message,
     })
   }
-console.error(error)
+  console.error(error)
 
   return response.status(500).json({
     status: "error",
     message: "Internal server error",
   })
-})
-
-app.get("/:id", (req, res) => {
-  res.send(`Server is running! and your params is: ${req.params.id}`)
 })
 
 app.listen(PORT, () => {
